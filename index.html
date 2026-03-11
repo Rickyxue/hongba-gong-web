@@ -241,6 +241,15 @@
             gap: 10px;
             margin-bottom: 12px;
         }
+        .chat-close-btn {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px;
+        }
         .chat-avatar {
             width: 36px;
             height: 36px;
@@ -510,6 +519,7 @@
                     <h3>AI 点菜助手</h3>
                     <p>说出你的需求，我来帮你推荐</p>
                 </div>
+                <button class="chat-close-btn" onclick="closeChat()">✕</button>
             </div>
             
             <textarea class="chat-input" id="userNeed" placeholder="例如：5个人吃饭，预算500元，想吃粤菜"></textarea>
@@ -668,6 +678,10 @@
             document.getElementById('chatSection').classList.add('expanded');
         }
 
+        function closeChat() {
+            document.getElementById('chatSection').classList.remove('expanded');
+        }
+
         // 提交需求
         async function submitNeed() {
             const input = document.getElementById('userNeed');
@@ -696,10 +710,11 @@
                     })
                 });
                 
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 1500));
                 
-                document.getElementById('resultContent').textContent = 
-                    `收到需求：${input.value}\n\n推荐已发送，请查看群消息~`;
+                // Demo展示智能推荐结果
+                const result = generateDemoReply(input.value);
+                document.getElementById('resultContent').innerHTML = result;
                 resultSection.classList.add('show');
                 
             } catch (error) {
@@ -715,6 +730,40 @@
             toast.textContent = msg;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // Demo智能推荐生成
+        function generateDemoReply(need) {
+            const lower = need.toLowerCase();
+            let count = 4;
+            let budget = 500;
+            
+            // 解析人数
+            if (lower.includes('3')) count = 3;
+            else if (lower.includes('5')) count = 5;
+            else if (lower.includes('6')) count = 6;
+            else if (lower.includes('8')) count = 8;
+            
+            // 解析预算
+            if (lower.includes('300')) budget = 300;
+            else if (lower.includes('500')) budget = 500;
+            else if (lower.includes('800')) budget = 800;
+            else if (lower.includes('1000')) budget = 1000;
+            
+            const dishes = allDishes.slice(0, count + 2);
+            let total = 0;
+            let html = `<p style="margin-bottom:12px;">📝 收到需求：<strong>${need}</strong></p>`;
+            html += `<p style="margin-bottom:12px;color:#00d4aa;">💡 为您推荐（${count}人，预算约¥${budget}）：</p>`;
+            
+            dishes.forEach(d => {
+                const subtotal = d.price;
+                total += subtotal;
+                html += `<p style="margin:8px 0;">• ${d.name} - ¥${d.price} <span style="color:#999;font-size:12px;">(${d.desc})</span></p>`;
+            });
+            
+            html += `<p style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(0,212,170,0.3);font-weight:bold;">💰 预估总价：¥${total}</p>`;
+            
+            return html;
         }
 
         // 初始化
