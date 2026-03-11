@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>洪八公粤菜酒楼 - 智能点菜</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        .header {
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(192, 57, 43, 0.3);
+        }
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .menu-section {
+            margin-bottom: 30px;
+        }
+        .menu-section h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #f39c12;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .dishes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .dish-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        .dish-card:hover {
+            transform: translateY(-3px);
+        }
+        .dish-img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            background: #2d2d44;
+        }
+        .dish-info {
+            padding: 10px;
+        }
+        .dish-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .dish-price {
+            font-size: 16px;
+            color: #f39c12;
+            font-weight: bold;
+        }
+        .chat-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .chat-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #00d4aa;
+        }
+        .chat-input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 14px;
+            resize: none;
+            margin-bottom: 10px;
+        }
+        .chat-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .chat-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .chat-btn:hover {
+            transform: scale(1.02);
+        }
+        .chat-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .result-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 212, 170, 0.1);
+            border-radius: 12px;
+            display: none;
+        }
+        .result-section.show {
+            display: block;
+        }
+        .result-section h3 {
+            color: #00d4aa;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .result-section p {
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏮 洪八公粤菜酒楼</h1>
+        <p>智能点菜助手 | 古法创意粤菜</p>
+    </div>
+    
+    <div class="container">
+        <!-- 热门菜品 -->
+        <div class="menu-section">
+            <h2>🔥 热门推荐</h2>
+            <div class="dishes-grid" id="dishesGrid">
+                <!-- 菜品将通过JS加载 -->
+            </div>
+        </div>
+        
+        <!-- 智能推荐 -->
+        <div class="chat-section">
+            <div class="chat-title">🤖 告诉小八你的需求</div>
+            <textarea class="chat-input" id="userNeed" rows="3" placeholder="例如：5个人吃饭，预算500元，有什么粤菜推荐？"></textarea>
+            <button class="chat-btn" id="submitBtn" onclick="submitNeed()">获取推荐</button>
+            
+            <div class="result-section" id="resultSection">
+                <h3>📋 推荐菜单</h3>
+                <p id="resultContent"></p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>地址：深圳南山区海大创意园东座2楼</p>
+        <p>© 洪八公粤菜酒楼</p>
+    </div>
+
+    <script>
+        // 菜品数据
+        const dishes = [
+            { name: '白切鸡', price: '¥108', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/bqj001.png' },
+            { name: '蜜汁叉烧', price: '¥78', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/mzcs.png' },
+            { name: '烧鹅', price: '¥68', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/se001.png' },
+            { name: '剁椒鱼头', price: '¥68', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/djyt001.png' },
+            { name: '毛氏红烧肉', price: '¥68', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/mshsr001.png' },
+            { name: '老火靓汤', price: '¥88', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/lhlt.png' }
+        ];
+
+        // 加载菜品
+        function loadDishes() {
+            const grid = document.getElementById('dishesGrid');
+            dishes.forEach(dish => {
+                const card = document.createElement('div');
+                card.className = 'dish-card';
+                card.innerHTML = `
+                    <img class="dish-img" src="${dish.img}" alt="${dish.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect fill=%22%232d2d44%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%23666%22 font-size=%2212%22%3E暂无图片%3C/text%3E%3C/svg%3E'">
+                    <div class="dish-info">
+                        <div class="dish-name">${dish.name}</div>
+                        <div class="dish-price">${dish.price}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 提交需求
+        async function submitNeed() {
+            const input = document.getElementById('userNeed');
+            const btn = document.getElementById('submitBtn');
+            const resultSection = document.getElementById('resultSection');
+            const resultContent = document.getElementById('resultContent');
+            
+            if (!input.value.trim()) {
+                alert('请输入您的需求');
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.textContent = '提交中...';
+            resultSection.classList.remove('show');
+            
+            // 这里可以替换为实际的Webhook URL
+            // 示例：发送到飞书机器人或其他消息服务
+            const webhookUrl = 'YOUR_WEBHOOK_URL_HERE';
+            
+            try {
+                // 模拟发送（实际使用时替换为真实API调用）
+                // const response = await fetch(webhookUrl, {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify({ message: input.value })
+                // });
+                
+                // 模拟回复（Demo展示用）
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                resultContent.textContent = `收到您的需求：${input.value}\n\n我们的点菜助手将为您推荐合适的菜品，请添加客服微信获取详细推荐方案~`;
+                resultSection.classList.add('show');
+                
+            } catch (error) {
+                alert('提交失败，请稍后重试');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '获取推荐';
+            }
+        }
+
+        // 页面加载
+        loadDishes();
+    </script>
+</body>
+</html>
