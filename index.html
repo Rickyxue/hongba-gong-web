@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>洪八公粤菜酒楼 - 智能点菜 V0.03_260311</title>
+    <title>洪八公粤菜酒楼 - 智能点菜 V0.04</title>
     <style>
         * {
             margin: 0;
@@ -24,30 +24,24 @@
             background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-card) 100%);
             min-height: 100vh;
             color: var(--text);
-            padding-bottom: 20px;
         }
         
         /* Header */
         .header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            padding: 20px;
+            padding: 16px 20px;
             text-align: center;
             position: sticky;
             top: 0;
             z-index: 50;
         }
         .header h1 {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-        }
-        .header p {
-            font-size: 12px;
-            opacity: 0.9;
-            margin-top: 4px;
+            gap: 6px;
         }
         
         /* Container */
@@ -55,30 +49,22 @@
             max-width: 600px;
             margin: 0 auto;
             padding: 16px;
-            padding-bottom: 100px;
+            padding-bottom: 120px;
         }
         
         /* Banner */
         .banner {
             background: linear-gradient(135deg, var(--accent) 0%, #e67e22 100%);
             border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 20px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
-        .banner-icon {
-            font-size: 32px;
-        }
-        .banner-text h3 {
-            font-size: 16px;
-            margin-bottom: 2px;
-        }
-        .banner-text p {
-            font-size: 12px;
-            opacity: 0.9;
-        }
+        .banner-icon { font-size: 28px; }
+        .banner-text h3 { font-size: 15px; margin-bottom: 2px; }
+        .banner-text p { font-size: 12px; opacity: 0.9; }
         
         /* Category Tabs */
         .tabs {
@@ -89,53 +75,39 @@
             padding-bottom: 4px;
         }
         .tab {
-            padding: 8px 16px;
+            padding: 8px 14px;
             background: rgba(255,255,255,0.1);
             border-radius: 20px;
-            font-size: 13px;
+            font-size: 12px;
             white-space: nowrap;
             cursor: pointer;
             transition: all 0.2s;
             border: none;
             color: var(--text);
         }
-        .tab.active {
-            background: var(--primary);
-        }
+        .tab.active { background: var(--primary); }
         
-        /* Dishes Grid */
+        /* Dishes Grid - 统一无图片 */
         .dishes-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 10px;
         }
         .dish-card {
             background: rgba(255,255,255,0.08);
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-        }
-        .dish-img {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
-            background: #2d2d44;
-        }
-        .dish-info {
-            padding: 10px;
+            border-radius: 10px;
+            padding: 12px;
         }
         .dish-name {
             font-size: 14px;
             font-weight: 600;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
         .dish-desc {
             font-size: 11px;
             color: var(--text-secondary);
-            margin-bottom: 6px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            margin-bottom: 8px;
+            min-height: 28px;
         }
         .dish-bottom {
             display: flex;
@@ -148,65 +120,51 @@
             font-weight: 700;
         }
         
-        /* Add to Cart Button */
         .add-btn {
-            width: 28px;
-            height: 28px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             background: var(--primary);
             border: none;
             color: #fff;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         
-        /* Stepper */
         .stepper {
             display: none;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
-        .stepper.show {
-            display: flex;
-        }
+        .stepper.show { display: flex; }
         .stepper-btn {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             background: rgba(255,255,255,0.2);
             border: none;
             color: #fff;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
         }
-        .stepper-num {
-            font-size: 14px;
-            min-width: 20px;
-            text-align: center;
-        }
+        .stepper-num { font-size: 13px; min-width: 18px; text-align: center; }
         
-        /* Chat Section - 浮动底部，默认收起 */
+        /* Chat Section */
         .chat-section {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             background: var(--bg-dark);
-            padding: 12px 16px;
+            padding: 10px 16px;
             padding-bottom: max(16px, env(safe-area-inset-bottom));
             z-index: 100;
             box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
             transition: all 0.3s ease;
-            max-height: 60px;
+            max-height: 50px;
             overflow: hidden;
         }
-        .chat-section.expanded {
-            max-height: 80vh;
-            overflow-y: auto;
-        }
+        .chat-section.expanded { max-height: 85vh; overflow-y: auto; }
         
         .chat-toggle {
             display: flex;
@@ -215,151 +173,124 @@
             gap: 8px;
             cursor: pointer;
         }
-        .chat-toggle-icon {
-            font-size: 20px;
-        }
-        .chat-toggle-text {
-            font-size: 14px;
-            color: #00d4aa;
-            font-weight: 600;
-        }
+        .chat-toggle-icon { font-size: 18px; }
+        .chat-toggle-text { font-size: 13px; color: #00d4aa; font-weight: 600; }
         
-        .chat-content {
-            display: none;
-            margin-top: 12px;
-        }
-        .chat-section.expanded .chat-toggle {
-            display: none;
-        }
-        .chat-section.expanded .chat-content {
-            display: block;
-        }
+        .chat-content { display: none; }
+        .chat-section.expanded .chat-toggle { display: none; }
+        .chat-section.expanded .chat-content { display: block; }
         
         .chat-header {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
+        .chat-avatar {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #00d4aa, #00b894);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        .chat-title h3 { font-size: 13px; font-weight: 600; }
+        .chat-title p { font-size: 10px; color: var(--text-secondary); }
         .chat-close-btn {
             margin-left: auto;
             background: none;
             border: none;
             color: var(--text-secondary);
-            font-size: 20px;
-            cursor: pointer;
-            padding: 4px;
-        }
-        .chat-avatar {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, #00d4aa, #00b894);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             font-size: 18px;
-        }
-        .chat-title h3 {
-            font-size: 14px;
-            font-weight: 600;
-        }
-        .chat-title p {
-            font-size: 11px;
-            color: var(--text-secondary);
+            cursor: pointer;
         }
         
         .chat-input {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             background: rgba(255,255,255,0.1);
             color: var(--text);
-            font-size: 14px;
+            font-size: 13px;
             resize: none;
-            margin-bottom: 10px;
-            min-height: 60px;
+            margin-bottom: 8px;
+            min-height: 50px;
         }
-        .chat-input::placeholder {
-            color: rgba(255,255,255,0.4);
-        }
+        .chat-input::placeholder { color: rgba(255,255,255,0.4); }
         
         .chat-btn {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             background: linear-gradient(135deg, #00d4aa, #00b894);
             color: #fff;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
         }
         
         .result-section {
-            margin-top: 12px;
+            margin-top: 10px;
             padding: 12px;
             background: rgba(0,212,170,0.1);
-            border-radius: 12px;
+            border-radius: 10px;
             display: none;
         }
-        .result-section.show {
-            display: block;
+        .result-section.show { display: block; }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .result-item:last-child { border-bottom: none; }
+        .result-item-name { font-size: 13px; }
+        .result-item-price { color: var(--accent); font-size: 13px; }
+        
+        .result-total {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(0,212,170,0.3);
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
         }
         
-        .loading {
-            display: none;
-            text-align: center;
+        .result-cart-btn {
+            width: 100%;
+            margin-top: 10px;
             padding: 10px;
-            color: var(--text-secondary);
-        }
-        .loading.show {
-            display: block;
-        }
-        
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 16px;
-            font-size: 11px;
-            color: rgba(255,255,255,0.4);
-        }
-        
-        /* Toast */
-        .toast {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.8);
-            background: rgba(0,0,0,0.9);
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
             color: #fff;
-            padding: 16px 24px;
-            border-radius: 12px;
-            font-size: 14px;
-            opacity: 0;
-            transition: all 0.3s;
-            z-index: 1000;
-            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
         }
-        .toast.show {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-        }
+        
+        .loading { display: none; text-align: center; padding: 10px; color: var(--text-secondary); font-size: 12px; }
+        .loading.show { display: block; }
         
         /* Cart Badge */
         .cart-badge {
             position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
+            bottom: 70px;
+            right: 16px;
+            width: 48px;
+            height: 48px;
             background: var(--primary);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 22px;
             box-shadow: 0 4px 15px rgba(192, 57, 43, 0.4);
             z-index: 99;
             cursor: pointer;
@@ -370,34 +301,17 @@
             right: -5px;
             background: var(--accent);
             color: #000;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
         }
         
         /* Cart Modal */
-        .cart-modal {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--bg-dark);
-            border-radius: 20px 20px 0 0;
-            padding: 20px;
-            z-index: 200;
-            transform: translateY(100%);
-            transition: transform 0.3s;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-        .cart-modal.show {
-            transform: translateY(0);
-        }
         .cart-overlay {
             position: fixed;
             top: 0;
@@ -408,72 +322,111 @@
             z-index: 199;
             display: none;
         }
-        .cart-overlay.show {
-            display: block;
+        .cart-overlay.show { display: block; }
+        
+        .cart-modal {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-dark);
+            border-radius: 16px 16px 0 0;
+            padding: 16px;
+            z-index: 200;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+            max-height: 70vh;
+            overflow-y: auto;
         }
+        .cart-modal.show { transform: translateY(0); }
+        
         .cart-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
-        .cart-header h3 {
-            font-size: 18px;
-        }
+        .cart-header h3 { font-size: 16px; }
         .cart-close {
             background: none;
             border: none;
             color: var(--text-secondary);
-            font-size: 24px;
+            font-size: 22px;
             cursor: pointer;
         }
+        
         .cart-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
+            padding: 10px 0;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .cart-item-name {
-            flex: 1;
-            font-size: 14px;
-        }
+        .cart-item-name { flex: 1; font-size: 13px; }
+        
         .cart-item-stepper {
             display: flex;
             align-items: center;
             gap: 8px;
         }
+        
         .cart-total {
-            margin-top: 16px;
-            padding-top: 16px;
+            margin-top: 14px;
+            padding-top: 14px;
             border-top: 1px solid rgba(255,255,255,0.2);
             display: flex;
             justify-content: space-between;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
         }
-        .cart-total-price {
-            color: var(--accent);
+        .cart-total-price { color: var(--accent); }
+        
+        .cart-empty {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 30px;
+            font-size: 13px;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: rgba(0,0,0,0.9);
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+            text-align: center;
+        }
+        .toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        
+        .footer {
+            text-align: center;
+            padding: 14px;
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🏮 洪八公粤菜酒楼</h1>
-        <p>古法创意粤菜 · 智能点菜</p>
     </div>
     
     <div class="container">
-        <!-- Banner -->
         <div class="banner">
             <div class="banner-icon">🤖</div>
             <div class="banner-text">
                 <h3>AI 智能推荐</h3>
-                <p>告诉小八你的需求，帮你推荐</p>
+                <p>告诉小八你的需求</p>
             </div>
         </div>
         
-        <!-- 菜品分类 -->
         <div class="tabs">
             <button class="tab active" onclick="filterDishes('all')">全部</button>
             <button class="tab" onclick="filterDishes('粤菜')">粤菜</button>
@@ -505,7 +458,7 @@
         </div>
     </div>
     
-    <!-- AI推荐浮动框 -->
+    <!-- AI推荐 -->
     <div class="chat-section" id="chatSection">
         <div class="chat-toggle" onclick="toggleChat()">
             <span class="chat-toggle-icon">🤖</span>
@@ -517,59 +470,52 @@
                 <div class="chat-avatar">小八</div>
                 <div class="chat-title">
                     <h3>AI 点菜助手</h3>
-                    <p>说出你的需求，我来帮你推荐</p>
+                    <p>说出你的需求</p>
                 </div>
                 <button class="chat-close-btn" onclick="closeChat()">✕</button>
             </div>
             
-            <textarea class="chat-input" id="userNeed" placeholder="例如：5个人吃饭，预算500元，想吃粤菜"></textarea>
+            <textarea class="chat-input" id="userNeed" placeholder="例如：4个人，预算400元"></textarea>
             
             <button class="chat-btn" id="submitBtn" onclick="submitNeed()">
-                🚀 获取智能推荐
+                🚀 获取推荐
             </button>
             
-            <div class="loading" id="loading">
-                正在获取推荐...
-            </div>
+            <div class="loading" id="loading">推荐中...</div>
             
-            <div class="result-section" id="resultSection">
-                <div id="resultContent"></div>
-            </div>
+            <div class="result-section" id="resultSection"></div>
         </div>
     </div>
     
-    <div class="footer">
-        <p>地址：深圳南山区海大创意园东座2楼</p>
-        <p>© 洪八公粤菜酒楼</p>
-    </div>
+    <div class="footer">地址：深圳南山区海大创意园东座2楼</div>
     
     <div class="toast" id="toast"></div>
 
     <script>
-        // 菜品数据
+        // 菜品数据 - 统一无图片
         const allDishes = [
-            { name: '白切鸡', price: 108, category: '粤菜', tags: ['招牌'], desc: '肉质鲜嫩，骨髓带血', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/bqj001.png' },
-            { name: '蜜汁叉烧', price: 78, category: '粤菜', tags: ['招牌'], desc: '外焦里嫩，蜜汁香甜', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/mzcs.png' },
-            { name: '烧鹅', price: 68, category: '粤菜', tags: ['招牌'], desc: '荔枝木烤制，皮脆肉嫩', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/se001.png' },
-            { name: '剁椒鱼头', price: 68, category: '湘菜', tags: ['辣'], desc: '湘菜代表，麻辣鲜香', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/djyt001.png' },
-            { name: '毛氏红烧肉', price: 68, category: '湘菜', tags: ['招牌'], desc: '肥而不腻，咸甜微辣', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/mshsr001.png' },
-            { name: '老火靓汤', price: 88, category: '粤菜', tags: ['养生'], desc: '3小时慢炖，滋补养生', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/lhlt.png' },
-            { name: '辣椒炒肉', price: 58, category: '湘菜', tags: ['辣', '下饭'], desc: '湘菜家常，必点下饭菜', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/ljcr001.png' },
-            { name: '清蒸东星斑', price: 268, category: '粤菜', tags: ['海鲜'], desc: '鲜活海鱼，清蒸最佳', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/qzdxb.png' },
-            { name: '葱油鸡', price: 78, category: '粤菜', tags: [], desc: '葱香浓郁，鸡肉嫩滑', img: '' },
-            { name: '蚝油生菜', price: 38, category: '粤菜', tags: ['素'], desc: '清爽解腻，寓意生财', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/hysc.png' },
-            { name: '宫保鸡丁', price: 58, category: '川菜', tags: ['辣'], desc: '麻辣鲜香，花生脆爽', img: '' },
-            { name: '麻婆豆腐', price: 38, category: '川菜', tags: ['辣'], desc: '麻辣鲜香，豆腐嫩滑', img: '' },
-            { name: '回锅肉', price: 48, category: '川菜', tags: ['辣'], desc: '川菜经典，肥而不腻', img: '' },
-            { name: '水煮肉片', price: 58, category: '川菜', tags: ['辣'], desc: '麻辣鲜嫩，超下饭', img: '' },
-            { name: '东坡肉', price: 88, category: '浙菜', tags: ['招牌'], desc: '酥软入口，肥而不腻', img: '' },
-            { name: '佛跳墙', price: 298, category: '闽菜', tags: ['招牌', '滋补'], desc: '山珍海味，滋补佳品', img: '' }
+            { name: '白切鸡', price: 108, category: '粤菜', tags: ['招牌'], desc: '肉质鲜嫩，骨髓带血' },
+            { name: '蜜汁叉烧', price: 78, category: '粤菜', tags: ['招牌'], desc: '外焦里嫩，蜜汁香甜' },
+            { name: '烧鹅', price: 68, category: '粤菜', tags: ['招牌'], desc: '荔枝木烤制，皮脆肉嫩' },
+            { name: '剁椒鱼头', price: 68, category: '湘菜', tags: ['辣'], desc: '湘菜代表，麻辣鲜香' },
+            { name: '毛氏红烧肉', price: 68, category: '湘菜', tags: ['招牌'], desc: '肥而不腻，咸甜微辣' },
+            { name: '老火靓汤', price: 88, category: '粤菜', tags: ['养生'], desc: '3小时慢炖，滋补养生' },
+            { name: '辣椒炒肉', price: 58, category: '湘菜', tags: ['辣', '下饭'], desc: '湘菜家常，必点下饭菜' },
+            { name: '清蒸东星斑', price: 268, category: '粤菜', tags: ['海鲜'], desc: '鲜活海鱼，清蒸最佳' },
+            { name: '葱油鸡', price: 78, category: '粤菜', tags: [], desc: '葱香浓郁，鸡肉嫩滑' },
+            { name: '蚝油生菜', price: 38, category: '粤菜', tags: ['素'], desc: '清爽解腻，寓意生财' },
+            { name: '宫保鸡丁', price: 58, category: '川菜', tags: ['辣'], desc: '麻辣鲜香，花生脆爽' },
+            { name: '麻婆豆腐', price: 38, category: '川菜', tags: ['辣'], desc: '麻辣鲜香，豆腐嫩滑' },
+            { name: '回锅肉', price: 48, category: '川菜', tags: ['辣'], desc: '川菜经典，肥而不腻' },
+            { name: '水煮肉片', price: 58, category: '川菜', tags: ['辣'], desc: '麻辣鲜嫩，超下饭' },
+            { name: '东坡肉', price: 88, category: '浙菜', tags: ['招牌'], desc: '酥软入口，肥而不腻' },
+            { name: '佛跳墙', price: 298, category: '闽菜', tags: ['招牌', '滋补'], desc: '山珍海味，滋补佳品' }
         ];
 
         let currentFilter = 'all';
         let cart = {};
+        let recommendedDishes = [];
 
-        // 加载菜品
         function loadDishes() {
             const grid = document.getElementById('dishesGrid');
             grid.innerHTML = '';
@@ -578,40 +524,30 @@
                 ? allDishes 
                 : allDishes.filter(d => d.category === currentFilter || d.tags.includes(currentFilter));
             
-            filtered.forEach((dish, index) => {
-                const card = document.createElement('div');
-                card.className = 'dish-card';
-                
-                const imgHtml = dish.img 
-                    ? `<img class="dish-img" src="${dish.img}" alt="${dish.name}" onerror="this.style.display='none'">`
-                    : `<div class="dish-img" style="display:flex;align-items:center;justify-content:center;font-size:30px;">🍽️</div>`;
-                
+            filtered.forEach(dish => {
                 const qty = cart[dish.name] || 0;
-                
-                card.innerHTML = `
-                    ${imgHtml}
-                    <div class="dish-info">
-                        <div class="dish-name">${dish.name}</div>
-                        <div class="dish-desc">${dish.desc}</div>
-                        <div class="dish-bottom">
-                            <span class="dish-price">¥${dish.price}</span>
-                            ${qty > 0 ? `
-                                <div class="stepper show">
-                                    <button class="stepper-btn" onclick="updateCart('${dish.name}', -1)">-</button>
-                                    <span class="stepper-num">${qty}</span>
-                                    <button class="stepper-btn" onclick="updateCart('${dish.name}', 1)">+</button>
-                                </div>
-                            ` : `
-                                <button class="add-btn" onclick="updateCart('${dish.name}', 1)">+</button>
-                            `}
-                        </div>
+                const div = document.createElement('div');
+                div.className = 'dish-card';
+                div.innerHTML = `
+                    <div class="dish-name">${dish.name}</div>
+                    <div class="dish-desc">${dish.desc}</div>
+                    <div class="dish-bottom">
+                        <span class="dish-price">¥${dish.price}</span>
+                        ${qty > 0 ? `
+                            <div class="stepper show">
+                                <button class="stepper-btn" onclick="updateCart('${dish.name}', -1)">-</button>
+                                <span class="stepper-num">${qty}</span>
+                                <button class="stepper-btn" onclick="updateCart('${dish.name}', 1)">+</button>
+                            </div>
+                        ` : `
+                            <button class="add-btn" onclick="updateCart('${dish.name}', 1)">+</button>
+                        `}
                     </div>
                 `;
-                grid.appendChild(card);
+                grid.appendChild(div);
             });
         }
 
-        // 筛选菜品
         function filterDishes(category) {
             currentFilter = category;
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -619,25 +555,23 @@
             loadDishes();
         }
 
-        // 购物车
         function updateCart(name, delta) {
             if (!cart[name]) cart[name] = 0;
             cart[name] += delta;
             if (cart[name] <= 0) delete cart[name];
-            
             updateCartUI();
             loadDishes();
         }
 
         function updateCartUI() {
             const count = Object.values(cart).reduce((a, b) => a + b, 0);
-            document.getElementById('cartCount').textContent = count;
-            document.getElementById('cartCount').style.display = count > 0 ? 'flex' : 'none';
+            const el = document.getElementById('cartCount');
+            el.textContent = count;
+            el.style.display = count > 0 ? 'flex' : 'none';
             
-            // 更新购物车内容
             const cartItems = document.getElementById('cartItems');
             if (Object.keys(cart).length === 0) {
-                cartItems.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:20px;">购物车是空的</p>';
+                cartItems.innerHTML = '<div class="cart-empty">购物车是空的</div>';
             } else {
                 let html = '';
                 let total = 0;
@@ -648,10 +582,10 @@
                         total += subtotal;
                         html += `
                             <div class="cart-item">
-                                <span class="cart-item-name">${dish.name}</span>
+                                <span class="cart-item-name">${dish.name} ×${qty}</span>
                                 <div class="cart-item-stepper">
                                     <button class="stepper-btn" onclick="updateCart('${dish.name}', -1)">-</button>
-                                    <span class="stepper-num">${qty}</span>
+                                    <span>${qty}</span>
                                     <button class="stepper-btn" onclick="updateCart('${dish.name}', 1)">+</button>
                                 </div>
                             </div>
@@ -673,7 +607,6 @@
             document.getElementById('cartModal').classList.remove('show');
         }
 
-        // AI推荐展开/收起
         function toggleChat() {
             document.getElementById('chatSection').classList.add('expanded');
         }
@@ -682,7 +615,6 @@
             document.getElementById('chatSection').classList.remove('expanded');
         }
 
-        // 提交需求
         async function submitNeed() {
             const input = document.getElementById('userNeed');
             const btn = document.getElementById('submitBtn');
@@ -699,47 +631,60 @@
             resultSection.classList.remove('show');
             
             try {
-                const WEBHOOK_URL = 'https://open.feishu.cn/open-apis/bot/v2/hook/e5155d24-dbc1-4644-94ac-53fa1d593f46';
-                
-                await fetch(WEBHOOK_URL, {
+                // 发送到飞书
+                await fetch('https://open.feishu.cn/open-apis/bot/v2/hook/e5155d24-dbc1-4644-94ac-53fa1d593f46', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        msg_type: 'text',
-                        content: { text: `【点菜需求】${input.value}` }
-                    })
+                    body: JSON.stringify({ msg_type: 'text', content: { text: `【点菜需求】${input.value}` } })
                 });
                 
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                await new Promise(r => setTimeout(r, 800));
                 
-                // Demo展示智能推荐结果
-                const result = generateDemoReply(input.value);
-                document.getElementById('resultContent').innerHTML = result;
+                // 生成推荐（不超预算+50）
+                recommendedDishes = generateRecommendation(input.value);
+                
+                // 渲染推荐结果
+                let total = 0;
+                let html = `<p style="margin-bottom:10px;font-size:13px;">📝 ${input.value}</p>`;
+                html += `<p style="color:#00d4aa;margin-bottom:10px;font-size:12px;">💡 为您推荐：</p>`;
+                
+                recommendedDishes.forEach(d => {
+                    total += d.price;
+                    html += `
+                        <div class="result-item">
+                            <span class="result-item-name">${d.name}</span>
+                            <span class="result-item-price">¥${d.price}</span>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                    <div class="result-total">
+                        <span>预估总价</span>
+                        <span>¥${total}</span>
+                    </div>
+                    <button class="result-cart-btn" onclick="addRecommendedToCart()">🛒 加入购物车</button>
+                `;
+                
+                resultSection.innerHTML = html;
                 resultSection.classList.add('show');
                 
             } catch (error) {
-                showToast('提交失败，请稍后重试');
+                showToast('提交失败');
             } finally {
                 btn.disabled = false;
                 loading.classList.remove('show');
             }
         }
 
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.textContent = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
-        }
-
-        // Demo智能推荐生成
-        function generateDemoReply(need) {
+        function generateRecommendation(need) {
             const lower = need.toLowerCase();
             let count = 4;
-            let budget = 500;
+            let budget = 400;
             
             // 解析人数
-            if (lower.includes('3')) count = 3;
+            if (lower.includes('2')) count = 2;
+            else if (lower.includes('3')) count = 3;
             else if (lower.includes('5')) count = 5;
             else if (lower.includes('6')) count = 6;
             else if (lower.includes('8')) count = 8;
@@ -747,26 +692,56 @@
             // 解析预算
             if (lower.includes('300')) budget = 300;
             else if (lower.includes('500')) budget = 500;
+            else if (lower.includes('600')) budget = 600;
             else if (lower.includes('800')) budget = 800;
             else if (lower.includes('1000')) budget = 1000;
             
-            const dishes = allDishes.slice(0, count + 2);
+            // 预算上限 = 预算 + 50
+            const maxBudget = budget + 50;
+            
+            // 选择菜品
+            const selected = [];
             let total = 0;
-            let html = `<p style="margin-bottom:12px;">📝 收到需求：<strong>${need}</strong></p>`;
-            html += `<p style="margin-bottom:12px;color:#00d4aa;">💡 为您推荐（${count}人，预算约¥${budget}）：</p>`;
             
-            dishes.forEach(d => {
-                const subtotal = d.price;
-                total += subtotal;
-                html += `<p style="margin:8px 0;">• ${d.name} - ¥${d.price} <span style="color:#999;font-size:12px;">(${d.desc})</span></p>`;
-            });
+            // 先选招牌菜
+            const signature = allDishes.filter(d => d.tags.includes('招牌'));
+            for (const dish of signature) {
+                if (selected.length >= count) break;
+                if (total + dish.price <= maxBudget) {
+                    selected.push(dish);
+                    total += dish.price;
+                }
+            }
             
-            html += `<p style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(0,212,170,0.3);font-weight:bold;">💰 预估总价：¥${total}</p>`;
+            // 再选其他菜填满
+            for (const dish of allDishes) {
+                if (selected.length >= count) break;
+                if (!selected.find(d => d.name === dish.name) && total + dish.price <= maxBudget) {
+                    selected.push(dish);
+                    total += dish.price;
+                }
+            }
             
-            return html;
+            return selected;
         }
 
-        // 初始化
+        function addRecommendedToCart() {
+            recommendedDishes.forEach(d => {
+                if (!cart[d.name]) cart[d.name] = 0;
+                cart[d.name] += 1;
+            });
+            updateCartUI();
+            openCart();
+            showToast('已加入购物车');
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
         loadDishes();
         updateCartUI();
     </script>
