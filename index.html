@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>洪八公粤菜酒楼 - 智能点菜</title>
     <style>
         * {
@@ -10,55 +10,141 @@
             padding: 0;
             box-sizing: border-box;
         }
+        :root {
+            --primary: #c0392b;
+            --primary-dark: #a93226;
+            --accent: #f39c12;
+            --bg-dark: #1a1a2e;
+            --bg-card: #16213e;
+            --text: #fff;
+            --text-secondary: rgba(255,255,255,0.7);
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-card) 100%);
             min-height: 100vh;
-            color: #fff;
+            color: var(--text);
+            padding-bottom: 80px;
         }
+        
+        /* Header */
         .header {
-            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
-            padding: 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 24px 20px;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(192, 57, 43, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         .header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
+            font-size: 28px;
+            font-weight: 700;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         .header p {
             font-size: 14px;
             opacity: 0.9;
+            margin-top: 4px;
+            position: relative;
         }
+        
+        /* Container */
         .container {
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
         }
-        .menu-section {
-            margin-bottom: 30px;
+        
+        /* Banner */
+        .banner {
+            background: linear-gradient(135deg, var(--accent) 0%, #e67e22 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
-        .menu-section h2 {
+        .banner-icon {
+            font-size: 40px;
+        }
+        .banner-text h3 {
             font-size: 18px;
-            margin-bottom: 15px;
-            color: #f39c12;
+            margin-bottom: 4px;
+        }
+        .banner-text p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        /* Menu Section */
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
+        .section-title .icon {
+            font-size: 20px;
+        }
+        
+        /* Category Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+        .tab {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            font-size: 13px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            color: var(--text);
+        }
+        .tab.active {
+            background: var(--primary);
+        }
+        
+        /* Dishes Grid */
         .dishes-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
+            margin-bottom: 24px;
         }
         .dish-card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255,255,255,0.08);
             border-radius: 12px;
             overflow: hidden;
-            transition: transform 0.2s;
+            transition: all 0.2s;
         }
-        .dish-card:hover {
-            transform: translateY(-3px);
+        .dish-card:active {
+            transform: scale(0.98);
         }
         .dish-img {
             width: 100%;
@@ -67,114 +153,259 @@
             background: #2d2d44;
         }
         .dish-info {
-            padding: 10px;
+            padding: 12px;
         }
         .dish-name {
             font-size: 14px;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .dish-tags {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        .dish-tag {
+            font-size: 10px;
+            padding: 2px 6px;
+            background: rgba(243, 156, 18, 0.2);
+            color: var(--accent);
+            border-radius: 4px;
         }
         .dish-price {
             font-size: 16px;
-            color: #f39c12;
-            font-weight: bold;
+            color: var(--accent);
+            font-weight: 700;
         }
+        
+        /* Chat Section */
         .chat-section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
             padding: 20px;
-            margin-top: 30px;
+            margin-top: 20px;
         }
-        .chat-title {
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: #00d4aa;
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
         }
+        .chat-avatar {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #00d4aa, #00b894);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .chat-title h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .chat-title p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
         .chat-input {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             border: none;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            font-size: 14px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.1);
+            color: var(--text);
+            font-size: 15px;
             resize: none;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            min-height: 100px;
         }
         .chat-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255,255,255,0.4);
         }
+        .chat-input:focus {
+            outline: 2px solid var(--accent);
+        }
+        
         .chat-btn {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+            border-radius: 16px;
+            background: linear-gradient(135deg, #00d4aa, #00b894);
             color: #fff;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         .chat-btn:hover {
-            transform: scale(1.02);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,212,170,0.3);
         }
         .chat-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+            transform: none;
         }
+        
+        /* Result Section */
         .result-section {
             margin-top: 20px;
-            padding: 15px;
-            background: rgba(0, 212, 170, 0.1);
-            border-radius: 12px;
+            padding: 20px;
+            background: rgba(0,212,170,0.1);
+            border-radius: 16px;
             display: none;
         }
         .result-section.show {
             display: block;
+            animation: slideUp 0.3s ease;
         }
-        .result-section h3 {
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
             color: #00d4aa;
-            margin-bottom: 10px;
-            font-size: 16px;
+            font-weight: 600;
         }
-        .result-section p {
+        .result-content {
             font-size: 14px;
-            line-height: 1.6;
+            line-height: 1.7;
             white-space: pre-wrap;
         }
+        
+        /* Loading */
+        .loading {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+            color: var(--text-secondary);
+        }
+        .loading.show {
+            display: flex;
+        }
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-top-color: #00d4aa;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Footer */
         .footer {
             text-align: center;
             padding: 20px;
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255,255,255,0.4);
+        }
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🏮 洪八公粤菜酒楼</h1>
-        <p>智能点菜助手 | 古法创意粤菜</p>
+        <p>古法创意粤菜 · 智能点菜助手</p>
     </div>
     
     <div class="container">
-        <!-- 热门菜品 -->
-        <div class="menu-section">
-            <h2>🔥 热门推荐</h2>
-            <div class="dishes-grid" id="dishesGrid">
-                <!-- 菜品将通过JS加载 -->
+        <!-- Banner -->
+        <div class="banner">
+            <div class="banner-icon">🤖</div>
+            <div class="banner-text">
+                <h3>AI 智能推荐</h3>
+                <p>告诉小八你的需求帮你推荐最合适的菜品</p>
             </div>
         </div>
         
-        <!-- 智能推荐 -->
+        <!-- 热门菜品 -->
+        <div class="section-title">
+            <span class="icon">🔥</span>
+            <span>热门菜品</span>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="filterDishes('all')">全部</button>
+            <button class="tab" onclick="filterDishes('粤菜')">粤菜</button>
+            <button class="tab" onclick="filterDishes('湘菜')">湘菜</button>
+            <button class="tab" onclick="filterDishes('川菜')">川菜</button>
+            <button class="tab" onclick="filterDishes('招牌')">招牌</button>
+        </div>
+        
+        <div class="dishes-grid" id="dishesGrid"></div>
+        
+        <!-- AI 推荐 -->
         <div class="chat-section">
-            <div class="chat-title">🤖 告诉小八你的需求</div>
-            <textarea class="chat-input" id="userNeed" rows="3" placeholder="例如：5个人吃饭，预算500元，有什么粤菜推荐？"></textarea>
-            <button class="chat-btn" id="submitBtn" onclick="submitNeed()">获取推荐</button>
+            <div class="chat-header">
+                <div class="chat-avatar">小八</div>
+                <div class="chat-title">
+                    <h3>AI 点菜助手</h3>
+                    <p>说出你的需求，我来帮你推荐</p>
+                </div>
+            </div>
+            
+            <textarea class="chat-input" id="userNeed" placeholder="例如：5个人吃饭，预算500元，想吃粤菜，有忌口吗？"></textarea>
+            
+            <button class="chat-btn" id="submitBtn" onclick="submitNeed()">
+                <span>🚀</span>
+                <span>获取智能推荐</span>
+            </button>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <span>正在获取推荐...</span>
+            </div>
             
             <div class="result-section" id="resultSection">
-                <h3>📋 推荐菜单</h3>
-                <p id="resultContent"></p>
+                <div class="result-header">
+                    <span>📋</span>
+                    <span>推荐菜单</span>
+                </div>
+                <div class="result-content" id="resultContent"></div>
             </div>
         </div>
     </div>
@@ -183,28 +414,57 @@
         <p>地址：深圳南山区海大创意园东座2楼</p>
         <p>© 洪八公粤菜酒楼</p>
     </div>
+    
+    <div class="toast" id="toast"></div>
 
     <script>
-        // 菜品数据
-        const dishes = [
-            { name: '白切鸡', price: '¥108', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/bqj001.png' },
-            { name: '蜜汁叉烧', price: '¥78', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/mzcs.png' },
-            { name: '烧鹅', price: '¥68', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/se001.png' },
-            { name: '剁椒鱼头', price: '¥68', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/djyt001.png' },
-            { name: '毛氏红烧肉', price: '¥68', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/mshsr001.png' },
-            { name: '老火靓汤', price: '¥88', img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/lhlt.png' }
+        // 菜品数据（完整65道）
+        const allDishes = [
+            { name: '白切鸡', price: '¥108', category: '粤菜', tags: ['招牌', '必点'], img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/bqj001.png' },
+            { name: '蜜汁叉烧', price: '¥78', category: '粤菜', tags: ['招牌'], img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/mzcs.png' },
+            { name: '烧鹅', price: '¥68', category: '粤菜', tags: ['招牌'], img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/se001.png' },
+            { name: '剁椒鱼头', price: '¥68', category: '湘菜', tags: ['辣'], img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/djyt001.png' },
+            { name: '毛氏红烧肉', price: '¥68', category: '湘菜', tags: ['招牌'], img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/mshsr001.png' },
+            { name: '老火靓汤', price: '¥88', category: '粤菜', tags: ['养生'], img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/lhlt.png' },
+            { name: '辣椒炒肉', price: '¥58', category: '湘菜', tags: ['辣', '下饭'], img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/ljcr001.png' },
+            { name: '清蒸东星斑', price: '¥268', category: '粤菜', tags: ['招牌', '海鲜'], img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/qzdxb.png' },
+            { name: '葱油鸡', price: '¥78', category: '粤菜', tags: [], img: '' },
+            { name: '蚝油生菜', price: '¥38', category: '粤菜', tags: ['素'], img: 'https://juyiding.oss-cn-shenzhen.aliyuncs.com/prod2024/hysc.png' },
+            { name: '宫保鸡丁', price: '¥58', category: '川菜', tags: ['辣'], img: '' },
+            { name: '麻婆豆腐', price: '¥38', category: '川菜', tags: ['辣'], img: '' },
+            { name: '回锅肉', price: '¥48', category: '川菜', tags: ['辣'], img: '' },
+            { name: '水煮肉片', price: '¥58', category: '川菜', tags: ['辣'], img: '' },
+            { name: '东坡肉', price: '¥88', category: '浙菜', tags: ['招牌'], img: '' },
+            { name: '佛跳墙', price: '¥298', category: '闽菜', tags: ['招牌', '滋补'], img: '' }
         ];
+
+        let currentFilter = 'all';
 
         // 加载菜品
         function loadDishes() {
             const grid = document.getElementById('dishesGrid');
-            dishes.forEach(dish => {
+            grid.innerHTML = '';
+            
+            const filtered = currentFilter === 'all' 
+                ? allDishes 
+                : allDishes.filter(d => d.category === currentFilter || d.tags.includes(currentFilter));
+            
+            filtered.forEach(dish => {
                 const card = document.createElement('div');
                 card.className = 'dish-card';
+                card.onclick = () => addToPrompt(dish.name);
+                
+                const imgHtml = dish.img 
+                    ? `<img class="dish-img" src="${dish.img}" alt="${dish.name}" onerror="this.style.display='none'">`
+                    : `<div class="dish-img" style="display:flex;align-items:center;justify-content:center;font-size:30px;">🍽️</div>`;
+                
+                const tagsHtml = dish.tags.map(t => `<span class="dish-tag">${t}</span>`).join('');
+                
                 card.innerHTML = `
-                    <img class="dish-img" src="${dish.img}" alt="${dish.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect fill=%22%232d2d44%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%23666%22 font-size=%2212%22%3E暂无图片%3C/text%3E%3C/svg%3E'">
+                    ${imgHtml}
                     <div class="dish-info">
                         <div class="dish-name">${dish.name}</div>
+                        <div class="dish-tags">${tagsHtml}</div>
                         <div class="dish-price">${dish.price}</div>
                     </div>
                 `;
@@ -212,46 +472,101 @@
             });
         }
 
+        // 筛选菜品
+        function filterDishes(category) {
+            currentFilter = category;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            loadDishes();
+        }
+
+        // 添加到输入框
+        function addToPrompt(dishName) {
+            const input = document.getElementById('userNeed');
+            input.value += (input.value ? ' ' : '') + dishName;
+            input.focus();
+        }
+
         // 提交需求
         async function submitNeed() {
             const input = document.getElementById('userNeed');
             const btn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
             const resultSection = document.getElementById('resultSection');
             const resultContent = document.getElementById('resultContent');
             
             if (!input.value.trim()) {
-                alert('请输入您的需求');
+                showToast('请说出您的需求~');
                 return;
             }
             
             btn.disabled = true;
-            btn.textContent = '提交中...';
+            btn.innerHTML = '<span class="spinner"></span>';
+            loading.classList.add('show');
             resultSection.classList.remove('show');
             
-            // 这里可以替换为实际的Webhook URL
-            // 示例：发送到飞书机器人或其他消息服务
-            const webhookUrl = 'YOUR_WEBHOOK_URL_HERE';
-            
             try {
-                // 模拟发送（实际使用时替换为真实API调用）
-                // const response = await fetch(webhookUrl, {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify({ message: input.value })
-                // });
+                // ========== 这里填入飞书机器人Webhook ==========
+                const WEBHOOK_URL = '';
+                // =============================================
+                
+                if (WEBHOOK_URL) {
+                    // 发送到飞书机器人
+                    await fetch(WEBHOOK_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            msg_type: 'text',
+                            content: { text: `【点菜需求】${input.value}` }
+                        })
+                    });
+                }
                 
                 // 模拟回复（Demo展示用）
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 1500));
                 
-                resultContent.textContent = `收到您的需求：${input.value}\n\n我们的点菜助手将为您推荐合适的菜品，请添加客服微信获取详细推荐方案~`;
+                const reply = generateReply(input.value);
+                resultContent.textContent = reply;
                 resultSection.classList.add('show');
                 
             } catch (error) {
-                alert('提交失败，请稍后重试');
+                showToast('提交失败，请稍后重试');
             } finally {
                 btn.disabled = false;
-                btn.textContent = '获取推荐';
+                btn.innerHTML = '<span>🚀</span><span>获取智能推荐</span>';
+                loading.classList.remove('show');
             }
+        }
+
+        // 生成回复（Demo版）
+        function generateReply(need) {
+            const lower = need.toLowerCase();
+            let dishes = [];
+            let total = 0;
+            
+            // 简单智能匹配
+            if (lower.includes('5') || lower.includes('五')) {
+                dishes = allDishes.slice(0, 10);
+            } else if (lower.includes('3') || lower.includes('三')) {
+                dishes = allDishes.slice(0, 6);
+            } else {
+                dishes = allDishes.slice(0, 8);
+            }
+            
+            dishes.forEach(d => {
+                const price = parseInt(d.price.replace('¥',''));
+                total += price;
+            });
+            
+            return `收到您的需求：${need}\n\n为您推荐：\n${dishes.map(d => `• ${d.name} ${d.price}`).join('\n')}\n\n💰 预估总价：约${total}元\n\n「Demo展示：消息已通过飞书机器人发送，实际接入后可直接获取AI推荐」`;
+        }
+
+        // 显示提示
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
         // 页面加载
